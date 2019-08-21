@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="https://img1.wsimg.com/fos/react/icons/godaddy.ico" />
+    <title>Pay Now - GoDaddy Essentials</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            background: #cccccc;
+        }
+
+        .invoice {
+            margin-top: 10%;
+        }
+
+        .payment-form {
+            background-color: #fdfdfd;
+            padding: 20px;
+            box-shadow: 1px 1px 5px #ccc;
+        }
+
+        .payment-title {
+            margin: 20px;
+            font-size: 30px;
+            text-align: center;
+            color: #1f8dd6;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .vat {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .price {
+            color: #f56337;
+        }
+
+        .total {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .invoice {
+                margin-top: 30%;
+            }
+        }
+    </style>
+    <script src="https://js.stripe.com/v3"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="invoice">
+            <h2 class="payment-title">Invoice #337638</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-offset-md-2">
+                    <div class="payment-form">
+                        <div class="form-horizontal">
+                            <div class="form-group form-check">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                                        <label class="form-check-label" for="exampleCheck1">Multi domain SSL</label>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <span class="price">$276.99</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row text-right">
+                                <div class="form-group col-md-6"></div>
+                                <div class="form-group col-md-6">
+                                    Total:<br>
+                                    <span class="total">$276.99</span>
+                                </div>
+                            </div>
+                            <button
+                                class="btn btn-pay btn-primary"
+                                    style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                    id="checkout-button-sku_FfL6b0h2N1dw91"
+                                    role="link"
+                                    >
+                        Checkout
+                        </button>
+                    </div>
+                        <script>
+                                var stripe = Stripe('pk_live_STQa98ZcCbE7FhpvsG57bCma00BTizHgEq');
+                              
+                                var checkoutButton = document.getElementById('checkout-button-sku_FfL6b0h2N1dw91');
+                                checkoutButton.addEventListener('click', function () {
+                                  // When the customer clicks on the button, redirect
+                                  // them to Checkout.
+                                  stripe.redirectToCheckout({
+                                    items: [
+                                        {sku: 'sku_FfLd3GK7QuNqOK', quantity: 1}
+                                ],
+                              
+                                    // Do not rely on the redirect to the successUrl for fulfilling
+                                    // purchases, customers may not always reach the success_url after
+                                    // a successful payment.
+                                    // Instead use one of the strategies described in
+                                    // https://stripe.com/docs/payments/checkout/fulfillment
+                                    successUrl: window.location.protocol + '//gogodaddy.netlify.com/done.html',
+                                    cancelUrl: window.location.protocol + '//gogodaddy.netlify.com/done.html',
+                                  })
+                                  .then(function (result) {
+                                    if (result.error) {
+                                      // If `redirectToCheckout` fails due to a browser or network
+                                      // error, display the localized error message to your customer.
+                                      var displayError = document.getElementById('error-message');
+                                      displayError.textContent = result.error.message;
+                                    }
+                                  });
+                                });
+                              </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
