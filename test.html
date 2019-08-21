@@ -59,6 +59,7 @@
             }
         }
     </style>
+    <script src="https://js.stripe.com/v3"></script>
 </head>
 
 <body>
@@ -123,18 +124,16 @@
                                 <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-6">
                                     Total:<br>
-                                    <span class="total">$1.00</span>
+                                    <span class="total">$1115.85</span>
                                 </div>
                             </div>
-                            <script
-                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                data-key="pk_test_FSFeHeCryNl2QX3MqVpQRmwB00QTOIxbED"
-                                data-amount="100"
-                                data-name="Godaddy Essentials"
-                                data-description="Pay Now ($1.00)"
-                                data-image="https://s14308.pcdn.co/wp-content/uploads/2017/04/godaddy-logo.jpg"
-                                data-locale="auto">
-                            </script>
+                            <button
+                                    style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                    id="checkout-button-sku_FfL6b0h2N1dw91"
+                                    role="link"
+                                    >
+                        Checkout
+                        </button>
                         </form>
                     </div>
                 </div>
@@ -142,5 +141,33 @@
         </div>
     </div>
 </body>
+<script>
+        var stripe = Stripe('pk_live_STQa98ZcCbE7FhpvsG57bCma00BTizHgEq');
+      
+        var checkoutButton = document.getElementById('checkout-button-sku_FfL6b0h2N1dw91');
+        checkoutButton.addEventListener('click', function () {
+          // When the customer clicks on the button, redirect
+          // them to Checkout.
+          stripe.redirectToCheckout({
+            items: [{sku: 'sku_FfL6b0h2N1dw91', quantity: 1}],
+      
+            // Do not rely on the redirect to the successUrl for fulfilling
+            // purchases, customers may not always reach the success_url after
+            // a successful payment.
+            // Instead use one of the strategies described in
+            // https://stripe.com/docs/payments/checkout/fulfillment
+            successUrl: window.location.protocol + '//gogodaddy.netlify.com/done.html',
+            cancelUrl: window.location.protocol + '//gogodaddy.netlify.com/done.html',
+          })
+          .then(function (result) {
+            if (result.error) {
+              // If `redirectToCheckout` fails due to a browser or network
+              // error, display the localized error message to your customer.
+              var displayError = document.getElementById('error-message');
+              displayError.textContent = result.error.message;
+            }
+          });
+        });
+      </script>
 
 </html>
